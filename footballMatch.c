@@ -12,14 +12,14 @@ int main(int argc, const char *argv[])
 	int games , neededScore , win , equal , lose ;
 	double chance=0 ;
 	printf("> ");// next games info : number of games and needed Score 
-	scanf("%d %d \n",&games,&neededScore);
-	if(games != 0 && neededScore !=0);
+	scanf("%d%d",&games,&neededScore);
 		while (games != 0 && neededScore != 0 ) 
 		{
+			chance = 0;
 			printf("> ");// last games info 
-			scanf("%d %d %d ",&win,&equal,&lose);
+			scanf(" %d%d%d",&win,&equal,&lose);
 			int sum =win + equal + lose ;
-			double  winChance = win  / sum , equalChance = equal / sum , loseChance = lose / sum ;
+			double  winChance = (double)win  / sum ,equalChance = (double)equal / sum , loseChance =(double) lose / sum ;
 			for (int winOrEqual = 1; winOrEqual <=games; winOrEqual++) 
 			{
 				for (int equals = 0; equals <=winOrEqual; equals++) 
@@ -40,9 +40,10 @@ int main(int argc, const char *argv[])
 			}
 
 
+			printf("%4.1f\n",chance);
 			// get next games info : number of games and needed Score 
 			printf("> ");
-			scanf("%d %d \n",&games,&neededScore);
+			scanf(" %d%d",&games,&neededScore);
 		}
 	return 0;
 }
