@@ -40,10 +40,21 @@ int main(int argc, const char *argv[])
 			}
 
 
-
 			// get next games info : number of games and needed Score 
 			printf("> ");
 			scanf("%d %d \n",&games,&neededScore);
 		}
 	return 0;
+}
+/*
+this is function calcutatin power of number  .
+*/
+double  pow(double number ,double toPower)		
+{
+	double power =1 ;
+	for (int i = 1; i <=toPower; i++) 
+	{
+		power *= number ;
+	}
+	return power;
 }
