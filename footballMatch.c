@@ -24,12 +24,12 @@ int main(int argc, const char *argv[])
 			{
 				for (int equals = 0; equals <=winOrEqual; equals++) 
 				{
-					// Equal games have 1 score that mach with number of gamase 
+					// Equal games have 1 score that mach with number of equal gamas
 					int winScore = (winOrEqual -equals )	* 3 , thisGameScore = winScore + equals;
 					if(neededScore <= thisGameScore )
 					{
-						// calculatin this game possibility 
-						double thisGamePossibility = pow(winChance,(double) winOrEqual - equal) * pow(equalChance,(double)equal) * pow(loseChance , (double)games - winOrEqual);
+						// calculating this game possibility 
+						double thisGamePossibility = pow(winChance,(double)( winOrEqual - equal)) * pow(equalChance,(double)equal)  * pow(loseChance , (double)games - winOrEqual);
 						// add to total chance of get needed score (this or other game happened)
 						chance += thisGamePossibility ;
 
@@ -39,23 +39,11 @@ int main(int argc, const char *argv[])
 				}
 			}
 
-
-			printf("%4.1f\n",chance);
+			chance *=100; // show possibility in percent
+			printf("%f\n",chance);
 			// get next games info : number of games and needed Score 
 			printf("> ");
 			scanf(" %d%d",&games,&neededScore);
 		}
 	return 0;
-}
-/*
-this is function calcutatin power of number  .
-*/
-double  pow(double number ,double toPower)		
-{
-	double power =1 ;
-	for (int i = 1; i <=toPower; i++) 
-	{
-		power *= number ;
-	}
-	return power;
 }
