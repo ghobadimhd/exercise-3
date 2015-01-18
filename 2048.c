@@ -31,10 +31,10 @@ int main(int argc, const char *argv[])
 	while (gameNotOver) 
 	{
 		scanf(" %c%c%c",&direction,&direction,&direction);// it get three char esc(27), [ , and arrow char . we need last one 
-		//move(direction);
+		move(direction);
 		//merge(direction);
-		//move(direction);
-		//newTile();
+		move(direction);
+		newTile();
 		//show() ;
 		//gameNotOver = isLose() ;
 	}
@@ -73,4 +73,84 @@ void newTile()
 	screen[i][j]=newTileValue ; 
 	}
 	
+}
+/*
+this is function for moving tile in specifice direction .
+*/
+void move(char direction)
+{
+	int i , j // i and j used for index's of screen array
+		,*lineIndexChanger // it's used to change i or j value dynamicly , so we can choose one of them as index of line
+		,*tileIndexChanger // it's used to change i or j value dynamicly , so we can choose one of them as index of tile in line
+		,tileToStart , tileToEnd // this variable indicate that we start from which side of line
+		,stepDirection ;// it indicate direction of moving in line and work with tileToStart and tileToEnd , the value is 1 or -1
+	
+	if ( direction == up || direction == down  )
+	{
+		// if move direction was a vertical arrow , we should move through screen column and move tile in vertical lines 
+		// so lineIndexChanger point to i and tileIndexChanger j
+		lineIndexChanger = &j ;
+		tileIndexChanger = &i ;
+		if(direction == up)
+		{
+			tileToStart=0;
+			tileToEnd=3 ;
+			stepDirection = 1 ;
+		}
+		else 
+		{
+			tileToStart = 3 ;
+			tileToEnd = 0 ;
+			stepDirection = -1 ;
+		}
+		
+	}
+	 if ( direction == left || direction == right  )
+         {
+		// if move direction was a horizontal arrow , we should move through screen rows and move tile in horizontal lines 
+		// so lineIndexChanger point to j and tileIndexChanger point to i
+                 lineIndexChanger = &i ;
+                 tileIndexChanger = &j ;
+                 if(direction == left)
+                 {
+                         tileToStart=0;
+                         tileToEnd=3 ; 
+                         stepDirection = 1 ;
+                }
+                 else
+                 {
+                         tileToStart = 3 ;
+                         tileToEnd = 0 ; 
+                         stepDirection = -1 ;
+                 }
+          
+         }
+	
+	// it try to move tile in lines of screen depend on what lineIndexChanger point on :  i or j
+	// it move tile in screen column or screen  rows 
+	for (*lineIndexChanger = 0; *lineIndexChanger <4; (*lineIndexChanger)++) 
+	{
+		for (*tileIndexChanger = tileToStart;  *tileIndexChanger != tileToEnd; *tileIndexChanger += stepDirection) 
+		{
+			// it search for first empty tile in line with given direction 
+			// and change the value of empty tile  with value of first non-empty tile after it  
+			if ( screen[i][j] == 0 )
+			{
+				// saving tileIndexChanger in temp help us continue current loop after next loop done 
+				// zeroTile help us to change the values of the tiles in next loop
+				int *zeroTile = &screen[i][j] , temp=*tileIndexChanger ;
+				// it search for first non-empty tile after zeroTile and change it with zeroTile 
+				for (*tileIndexChanger += stepDirection ;*tileIndexChanger != tileToEnd + stepDirection; *tileIndexChanger += stepDirection) 
+					if ( screen[i][j] != 0 )
+					{
+						*zeroTile=screen[i][j];
+						screen[i][j]=0 ;
+						break ;
+					}
+				// fix tileToChange value , so previose loop work currectly 
+				*tileIndexChanger=temp ;
+			}
+		}
+	}
+
 }
