@@ -32,7 +32,7 @@ int main(int argc, const char *argv[])
 	{
 		scanf(" %c%c%c",&direction,&direction,&direction);// it get three char esc(27), [ , and arrow char . we need last one 
 		move(direction);
-		//merge(direction);
+		merge(direction);
 		move(direction);
 		newTile();
 		//show() ;
@@ -153,4 +153,80 @@ void move(char direction)
 		}
 	}
 
+}
+/*
+this is function for merging tile in specifice direction .
+*/
+void merge(char direction)
+{
+	int i , j // i and j used for index's of screen array
+		,*lineIndexChanger // it's used to change i or j value dynamicly , so we can choose one of them as index of line
+		,*tileIndexChanger // it's used to change i or j value dynamicly , so we can choose one of them as index of tile in line
+		,tileToStart , tileToEnd // this variable indicate that we start from which side of line
+		,stepDirection ;// it indicate direction of merging in line and work with tileToStart and tileToEnd , the value is 1 or -1
+	
+	if ( direction == up || direction == down  )
+	{
+		// if move direction was a vertical arrow , we should move through screen column and merge tile in vertical lines 
+		// so lineIndexChanger point to i and tileIndexChanger j
+		lineIndexChanger = &j ;
+		tileIndexChanger = &i ;
+		if(direction == up)
+		{
+			tileToStart=0;
+			tileToEnd=3 ;
+			stepDirection = 1 ;
+		}
+		else 
+		{
+			tileToStart = 3 ;
+			tileToEnd = 0 ;
+			stepDirection = -1 ;
+		}
+		
+	}
+	 if ( direction == left || direction == right  )
+         {
+		// if move direction was a horizontal arrow , we should move through screen rows and merge tile in horizontal lines 
+		// so lineIndexChanger point to j and tileIndexChanger point to i
+                 lineIndexChanger = &i ;
+                 tileIndexChanger = &j ;
+                 if(direction == left)
+                 {
+                         tileToStart=0;
+                         tileToEnd=3 ; 
+                         stepDirection = 1 ;
+                }
+                 else
+                 {
+                         tileToStart = 3 ;
+                         tileToEnd = 0 ; 
+                         stepDirection = -1 ;
+                 }
+          
+         }
+	
+	// it try to merge aside tile in lines of screen depend on what lineIndexChanger point on :  i or j
+	// it merge aside tile in screen column or screen  rows , if they have same value
+	for (*lineIndexChanger = 0 ; *lineIndexChanger <4 ; (*lineIndexChanger)++) 
+	{
+		for (*tileIndexChanger = tileToStart ;  *tileIndexChanger != tileToEnd ; /* tileIndexChager change in loop body */) 
+		{
+			// this loop search for first non-empty tile in line with given direction 
+			// save it in lastTile , move to next tile and check if two aside tile have equal values merge them 
+			if ( screen[i][j] != 0 )
+			{
+				// merge means that it sum value of two tile and save it in last tile and current tile should be zero 
+				int *lastTile = &screen[i][j] ;
+				*tileIndexChanger += stepDirection ; // move to next tile 
+				if ( screen[i][j] == *lastTile ) // merging aside tile if they have equal values 
+				{
+					 *lastTile *= 2 ;
+					 screen[i][j] = 0 ;
+				}
+			}
+			else 
+				*tileIndexChanger += stepDirection ; // move to next tile 
+		}
+	}
 }
