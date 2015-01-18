@@ -27,7 +27,7 @@ int main(int argc, const char *argv[])
 	char direction;
 	newTile();
 	newTile();
-	//show();
+	show();
 	while (gameNotOver) 
 	{
 		scanf(" %c%c%c",&direction,&direction,&direction);// it get three char esc(27), [ , and arrow char . we need last one 
@@ -35,7 +35,7 @@ int main(int argc, const char *argv[])
 		merge(direction);
 		move(direction);
 		newTile();
-		//show() ;
+		show() ;
 		//gameNotOver = isLose() ;
 	}
 	
@@ -88,7 +88,7 @@ void move(char direction)
 	if ( direction == up || direction == down  )
 	{
 		// if move direction was a vertical arrow , we should move through screen column and move tile in vertical lines 
-		// so lineIndexChanger point to i and tileIndexChanger j
+		// so lineIndexChanger point to j and tileIndexChanger i
 		lineIndexChanger = &j ;
 		tileIndexChanger = &i ;
 		if(direction == up)
@@ -108,7 +108,7 @@ void move(char direction)
 	 if ( direction == left || direction == right  )
          {
 		// if move direction was a horizontal arrow , we should move through screen rows and move tile in horizontal lines 
-		// so lineIndexChanger point to j and tileIndexChanger point to i
+		// so lineIndexChanger point to i and tileIndexChanger point to j
                  lineIndexChanger = &i ;
                  tileIndexChanger = &j ;
                  if(direction == left)
@@ -168,7 +168,7 @@ void merge(char direction)
 	if ( direction == up || direction == down  )
 	{
 		// if move direction was a vertical arrow , we should move through screen column and merge tile in vertical lines 
-		// so lineIndexChanger point to i and tileIndexChanger j
+		// so lineIndexChanger point to j and tileIndexChanger i
 		lineIndexChanger = &j ;
 		tileIndexChanger = &i ;
 		if(direction == up)
@@ -188,7 +188,7 @@ void merge(char direction)
 	 if ( direction == left || direction == right  )
          {
 		// if move direction was a horizontal arrow , we should move through screen rows and merge tile in horizontal lines 
-		// so lineIndexChanger point to j and tileIndexChanger point to i
+		// so lineIndexChanger point to i and tileIndexChanger point to j
                  lineIndexChanger = &i ;
                  tileIndexChanger = &j ;
                  if(direction == left)
@@ -228,5 +228,21 @@ void merge(char direction)
 			else 
 				*tileIndexChanger += stepDirection ; // move to next tile 
 		}
+	}
+}
+/*
+this is function for showing screen on stdout .
+*/
+void show()
+{
+	printf("%c[2J %c[H",27,27);// clear screen and move cursor to upper left corner 
+	for (int i = 0; i <4; i++) 
+	{
+		for (int j = 0; j <4; j++) 
+		{
+			printf("%d\t",screen[i][j]);
+			
+		}
+		printf("\n");
 	}
 }
