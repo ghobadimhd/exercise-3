@@ -23,12 +23,12 @@ int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's s
 // if user can't move tile in any direction game is over 
 int main(int argc, const char *argv[])
 {
-	int gameNotOver=1; // game not over yet 
+	int gameOver=0; // game not over yet 
 	char direction;
 	newTile();
 	newTile();
 	show();
-	while (gameNotOver) 
+	while (!gameOver) 
 	{
 		scanf(" %c%c%c",&direction,&direction,&direction);// it get three char esc(27), [ , and arrow char . we need last one 
 		move(direction);
@@ -36,9 +36,9 @@ int main(int argc, const char *argv[])
 		move(direction);
 		newTile();
 		show() ;
-		//gameNotOver = isLose() ;
+		gameOver = isLose() ;
 	}
-	
+	printf("You Lose !\n");
 	return 0;
 }
 /*
@@ -245,4 +245,54 @@ void show()
 		}
 		printf("\n");
 	}
+}
+/*
+this is function for checking that is user losed or not .
+*/
+int isLose()
+{
+	int *tiles = screen ; 
+	
+	// it's look for one free tile to prove that screen is not full 
+	// it saw array as One-dimensional for decreasing loops 
+	for (int i = 0; i < 16; i++) 
+		if (tiles[i]==0 )
+		{
+			
+			return 0 ; 
+		}
+
+
+	// checking four middle tile 
+	for (int i = 1; i <3; i++) 
+	{
+		for (int j = 1; j <3; j++) 
+		{
+			// looking for two tile with same value , if there is user is not losing
+			if ( screen[i][j]==screen[i-1][j] || screen[i][j]==screen[i+1][j] 
+				|| screen[i][j]==screen[i][j-1] || screen[i][j]==screen[i][j+1] )
+			{
+				return 0 ;
+			}
+		}
+	}
+	// checking corner tiles 
+	
+	if ( screen[0][0]==screen[0][1] || screen[0][0]==screen[1][0] // left upper 
+		|| screen[0][3]==screen[0][2] || screen[0][3]==screen[1][3] // ritgt upper 
+	  	|| screen[3][0]==screen[3][1] || screen[3][0]==screen[2][0] // left down 
+	  	|| screen[3][3]==screen[3][2] || screen[3][3]==screen[2][3] ) // right upper 
+	{
+		return 0 ;
+	}
+	// middle tile of sides 
+	if ( screen[0][1]==screen[0][2] // upper side 
+		|| screen[3][1]==screen[3][2] //  downer side  
+		|| screen[1][0]==screen[2][0] // left side 
+		|| screen[1][3]==screen[2][3] ) // right side  
+	{
+		return 0 ;
+	}
+	
+	return 1 ; // not lose 
 }
