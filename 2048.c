@@ -18,6 +18,7 @@ void newTile();// it create a tile in random location with random value
 void show();// it print down tile in stdout in good format 
 int isLose();// it check that if user lose 
 int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
+int isFull();// check screen for empty tiles 
 // it's first make two new tile then get a direction and move the tile's 
 // after merging tile it move them again and make new tile 
 // if user can't move tile in any direction game is over 
@@ -46,19 +47,8 @@ this is function creating new tile  .
 */
 void newTile()
 {
-	int isFull=1 ,  i , j // i and j are used for index's 
-			, *tiles = screen ; // tiles get us access to screen in linear way 
-	
-	// it's look for one free tile to prove that screen is not full 
-	// it saw array as One-dimensional for decreasing loops 
-	for (i = 0; i < 16; i++) 
-		if (tiles[i]==0 )
-		{
-			isFull=0;
-			break ; 
-		}
-
-	if ( !isFull )
+	int   i , j ; // i and j are used for index's 
+	if ( !isFull() )
 	{
 		// looking for a random free tile for new Tile 
 		do 
@@ -251,18 +241,8 @@ this is function for checking that is user losed or not .
 */
 int isLose()
 {
-	int *tiles = screen ; 
-	
-	// it's look for one free tile to prove that screen is not full 
-	// it saw array as One-dimensional for decreasing loops 
-	for (int i = 0; i < 16; i++) 
-		if (tiles[i]==0 )
-		{
-			
-			return 0 ; 
-		}
-
-
+	if( !isFull() )	
+		return 0; // if there is empty tile on screen user has chance to success 
 	// checking four middle tile 
 	for (int i = 1; i <3; i++) 
 	{
@@ -295,4 +275,20 @@ int isLose()
 	}
 	
 	return 1 ; // not lose 
+}
+/*
+this is function for checking that is any empty tile on screen .
+*/
+int isFull()
+{
+	int *tiles = screen ; // tiles get us access to screen in linear way (one-demential) 
+	
+	// it's look for one free tile to prove that screen is not full 
+	// it saw array as One-dimensional for decreasing loops 
+	for (int i = 0; i < 16; i++) 
+		if (tiles[i]==0 )
+		{
+			
+			return 0 ; 
+		}
 }
