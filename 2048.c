@@ -8,6 +8,8 @@ describtion : This is cool game  .
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <termio.h>
+#include <unistd.h>
 #define up 'A'
 #define down 'B'
 #define right 'C'
@@ -19,6 +21,7 @@ void show();// it print down tile in stdout in good format
 int isLose();// it check that if user lose 
 int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
 int isFull();// check screen for empty tiles 
+void tcSetMode(int);// it change terminal mode for desire input or output 
 // it's first make two new tile then get a direction and move the tile's 
 // after merging tile it move them again and make new tile 
 // if user can't move tile in any direction game is over 
@@ -26,6 +29,7 @@ int main(int argc, const char *argv[])
 {
 	int gameOver=0; // game not over yet 
 	char direction;
+	tcSetMode(1); // set desire terminal mode true 
 	newTile();
 	newTile();
 	show();
@@ -40,6 +44,8 @@ int main(int argc, const char *argv[])
 		gameOver = isLose() ;
 	}
 	printf("You Lose !\n");
+	tcSetMode(0); // set desire terminal mode false 
+
 	return 0;
 }
 /*
@@ -294,4 +300,19 @@ int isFull()
 			
 			return 0 ; 
 		}
+}
+/*
+this is function for changing terminal mode for better input .
+if the fundtion get true it uset ECHO and ICANON with couse termnal do not echo inputs and 
+get inputs immediately without any return key or tab ...
+*/
+void tcSetMode (int enable) 
+{
+	struct termios mode ;
+	tcgetattr(STDIN_FILENO , &mode ) ;// get current mode of terminal 
+	if (enable)
+		mode.c_lflag &= (~ICANON & ~ECHO) ; // disable ECHO ,  nocannonical  
+	else 
+		mode.c_lflag &= (ICANON & ECHO) ;// set connonical mode and enable echo 
+	tcsetattr(STDIN_FILENO , TCSANOW , &mode ) ;// save change and set new terminal parameter
 }
