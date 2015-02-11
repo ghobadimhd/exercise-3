@@ -10,6 +10,7 @@ describtion : This is cool game  .
 #include <math.h>
 #include <termio.h>
 #include <unistd.h>
+#include <time.h>
 #define up 'A'
 #define down 'B'
 #define right 'C'
@@ -29,7 +30,10 @@ int main(int argc, const char *argv[])
 {
 	int gameOver=0; // game not over yet 
 	char direction;
+
 	tcSetMode(1); // set desire terminal mode true 
+	srand(time(NULL)); // set the seed for rand function using unix time 
+
 	newTile();
 	newTile();
 	show();
