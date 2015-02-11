@@ -230,7 +230,10 @@ void show()
 	{
 		for (int j = 0; j <4; j++) 
 		{
-			printf("%d\t",screen[i][j]);
+			if( screen[i][j] == 0 ) 
+				printf("|\t");
+			else
+				printf("|%d\t",screen[i][j]);
 			
 		}
 		printf("\n");
