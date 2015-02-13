@@ -20,9 +20,10 @@ void merge(char);// it's merge (sum value of ) adjust tile's by getting side (or
 void newTile();// it create a tile in random location with random value 
 void show();// it print down tile in stdout in good format 
 int isLose();// it check that if user lose 
-int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
 int isFull();// check screen for empty tiles 
 void tcSetMode(int);// it change terminal mode for desire input or output 
+int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
+struct termios initMode ;
 // it's first make two new tile then get a direction and move the tile's 
 // after merging tile it move them again and make new tile 
 // if user can't move tile in any direction game is over 
@@ -313,10 +314,15 @@ get inputs immediately without any return key or tab ...
 void tcSetMode (int enable) 
 {
 	struct termios mode ;
-	tcgetattr(STDIN_FILENO , &mode ) ;// get current mode of terminal 
 	if (enable)
+	{
+		tcgetattr(STDIN_FILENO , &initMode ) ;// get current mode of inital mode of terminal 
+		mode = initMode ; 
 		mode.c_lflag &= (~ICANON & ~ECHO) ; // disable ECHO ,  nocannonical  
+		tcsetattr(STDIN_FILENO , TCSANOW , &mode ) ;// save change and set new terminal parameter
+	}
 	else 
-		mode.c_lflag &= (ICANON & ECHO) ;// set connonical mode and enable echo 
-	tcsetattr(STDIN_FILENO , TCSANOW , &mode ) ;// save change and set new terminal parameter
+	{
+		tcsetattr(STDIN_FILENO , TCSANOW , &initMode ) ;// reset terminal mode to it first mode 
+	}
 }
