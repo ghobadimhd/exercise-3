@@ -313,10 +313,14 @@ get inputs immediately without any return key or tab ...
 void tcSetMode (int enable) 
 {
 	struct termios mode ;
-	tcgetattr(STDIN_FILENO , &mode ) ;// get current mode of terminal 
+	static struct termios initMode ;
 	if (enable)
+	{
+		tcgetattr(STDIN_FILENO , &initMode ) ;// get current mode of terminal 
+		tcgetattr(STDIN_FILENO , &mode ) ;// get current mode of terminal 
 		mode.c_lflag &= (~ICANON & ~ECHO) ; // disable ECHO ,  nocannonical  
+		tcsetattr(STDIN_FILENO , TCSANOW , &mode ) ;// save change and set new terminal parameter
+	}
 	else 
-		mode.c_lflag &= (ICANON & ECHO) ;// set connonical mode and enable echo 
-	tcsetattr(STDIN_FILENO , TCSANOW , &mode ) ;// save change and set new terminal parameter
+		tcsetattr(STDIN_FILENO , TCSANOW , &initMode ) ;// save change and set new terminal parameter
 }
