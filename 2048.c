@@ -20,9 +20,10 @@ void merge(char);// it's merge (sum value of ) adjust tile's by getting side (or
 void newTile();// it create a tile in random location with random value 
 void show();// it print down tile in stdout in good format 
 int isLose();// it check that if user lose 
-int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
 int isFull();// check screen for empty tiles 
 void tcSetMode(int);// it change terminal mode for desire input or output 
+void saveGame();// it save game state
+int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
 // it's first make two new tile then get a direction and move the tile's 
 // after merging tile it move them again and make new tile 
 // if user can't move tile in any direction game is over 
@@ -324,3 +325,13 @@ void tcSetMode (int enable)
 	else 
 		tcsetattr(STDIN_FILENO , TCSANOW , &initMode ) ;// save change and set new terminal parameter
 }
+void saveGame()
+{
+        int *tiles =screen ;
+        for (int i = 0; i <15; i++) 
+        {
+                printf("%d-",tiles[i]);
+        }
+        printf("\n");
+}
+
