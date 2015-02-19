@@ -11,6 +11,7 @@ describtion : This is cool game  .
 #include <termio.h>
 #include <unistd.h>
 #include <time.h>
+#include <signal.h>
 #define up 'A'
 #define down 'B'
 #define right 'C'
@@ -23,6 +24,7 @@ int isLose();// it check that if user lose
 int isFull();// check screen for empty tiles 
 void tcSetMode(int);// it change terminal mode for desire input or output 
 void saveGame();// it save game state
+void exitGame();// it exit game and handle signals 
 int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
 // it's first make two new tile then get a direction and move the tile's 
 // after merging tile it move them again and make new tile 
@@ -32,6 +34,7 @@ int main(int argc, const char *argv[])
 	int gameOver=0; // game not over yet 
 	char direction;
 
+	signal(SIGINT , exitGame);
 	tcSetMode(1); // set desire terminal mode true 
 	srand(time(NULL)); // set the seed for rand function using unix time 
 
@@ -49,7 +52,7 @@ int main(int argc, const char *argv[])
 		gameOver = isLose() ;
 	}
 	printf("You Lose !\n");
-	tcSetMode(0); // set desire terminal mode false 
+	tcSetMode(0); // set desire terminal mode false // fix me 
 
 	return 0;
 }
@@ -334,4 +337,23 @@ void saveGame()
         }
         printf("\n");
 }
-
+/*
+this is function for exit form game and handeling signals .
+*/
+void exitGame(int status)
+{
+	int exitCode =0;
+	switch(status)
+	{
+		case 2:
+			saveGame(); 
+		break;
+		case 15:
+			saveGame();
+		break;
+		
+	}
+	tcSetMode(0);
+	exit(exitCode);
+	
+}
