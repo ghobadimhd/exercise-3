@@ -12,6 +12,7 @@ describtion : This is cool game  .
 #include <unistd.h>
 #include <time.h>
 #include <signal.h>
+#include <string.h>
 #define up 'A'
 #define down 'B'
 #define right 'C'
@@ -24,6 +25,7 @@ int isLose();// it check that if user lose
 int isFull();// check screen for empty tiles 
 void tcSetMode(int);// it change terminal mode for desire input or output 
 void saveGame();// it save game state
+void loadGame(); // it load the saved game 
 void exitGame();// it exit game and handle signals 
 int screen[4][4]= {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};// this our tile's screen  
 // it's first make two new tile then get a direction and move the tile's 
@@ -38,8 +40,13 @@ int main(int argc, const char *argv[])
 	tcSetMode(1); // set desire terminal mode true 
 	srand(time(NULL)); // set the seed for rand function using unix time 
 
-	newTile();
-	newTile();
+	if(argc > 1 && argv[1][0] == '-' && argv[1][1] == 'l')
+		loadGame();
+	else
+	{
+		newTile();
+		newTile();
+	}
 	show();
 	while (!gameOver) 
 	{
@@ -343,12 +350,39 @@ void saveGame()
 			printf("Saving failed !!!\n");
 		else
 		{
-        		for (int i = 0; i <15; i++) 
+        		for (int i = 0; i <16; i++) 
         		{
                 		fprintf(saveFile,"%d-",tiles[i]);
         		}
 			printf("Game saved . use -l to load it in next game .\n");
 		}
+	}
+}
+/*
+this is function for loading game .
+*/
+void loadGame()
+{
+	FILE *loadFile ; 
+	int *tile = screen , i=0;
+	char ch ;
+	loadFile = fopen(".2048.save" , "r");
+	if(loadFile != NULL )
+	{
+		ch = fgetc(loadFile);
+		while(ch != EOF && i < 16)
+		{
+			int number =0 , tenPower = 1 ;
+			while (ch != '-') 
+			{
+				number = (ch - 48 ) + (tenPower * number);
+				tenPower *=10;
+				ch = fgetc(loadFile);
+			}
+			tile[i++] = number;
+			ch = fgetc(loadFile);
+		}
+		fclose(loadFile);
 	}
 }
 /*
@@ -361,9 +395,11 @@ void exitGame(int status)
 	{
 		case 2:
 			saveGame(); 
+			tcSetMode(0);
 		break;
 		case 15:
 			saveGame();
+			tcSetMode(0);
 		break;
 		
 	}
