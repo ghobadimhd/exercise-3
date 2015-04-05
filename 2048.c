@@ -355,6 +355,7 @@ void saveGame()
                 		fprintf(saveFile,"%d-",tiles[i]);
         		}
 			printf("Game saved . use -l to load it in next game .\n");
+			fclose(saveFile);
 		}
 	}
 }
@@ -394,12 +395,12 @@ void exitGame(int status)
 	switch(status)
 	{
 		case 2:
-			saveGame(); 
 			tcSetMode(0);
+			saveGame(); 
 		break;
 		case 15:
-			saveGame();
 			tcSetMode(0);
+			saveGame();
 		break;
 		
 	}
