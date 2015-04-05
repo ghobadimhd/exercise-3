@@ -330,12 +330,26 @@ void tcSetMode (int enable)
 }
 void saveGame()
 {
+	FILE *saveFile;
         int *tiles =screen ;
-        for (int i = 0; i <15; i++) 
-        {
-                printf("%d-",tiles[i]);
-        }
-        printf("\n");
+	char answer ;
+	printf("Do you want save game ?(y/n):");
+	scanf("%c",&answer);
+	printf("\n");
+	if(answer == 'y')
+	{
+		saveFile = fopen(".2048.save" , "w");
+		if(saveFile == NULL)
+			printf("Saving failed !!!\n");
+		else
+		{
+        		for (int i = 0; i <15; i++) 
+        		{
+                		fprintf(saveFile,"%d-",tiles[i]);
+        		}
+			printf("Game saved . use -l to load it in next game .\n");
+		}
+	}
 }
 /*
 this is function for exit form game and handeling signals .
